@@ -1,7 +1,7 @@
 <?php
 define('DB_NAME', 'trx_tweets');
 define('DB_USER', '');
-define('DB_PASSWORD', 'ZAQ!2wsx');
+define('DB_PASSWORD', '');
 define('DB_HOST', 'localhost');
 
 
