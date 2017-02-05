@@ -21,23 +21,35 @@ class TwitterAPI {
 		);
 	}
 
-	public function fetchHashtagTweets($hashtag) {
+	public function fetchHashtagTweets($hashtag, $since_id = '', $count = 20) {
 		if(empty($hashtag)) return;
-
-		$url='https://api.twitter.com/1.1/search/tweets.json';
-		$getfield = '?q=#' . $hashtag.'&include_entities=false&with_twitter_user_id=true&result_type=mixed&count=10';
-		$requestMethod = 'GET';
-		 
-		$twitter = new TwitterAPIExchange( $this->settings );
-		 
-		$response = $twitter->setGetfield( $getfield )
-		->buildOauth( $url, $requestMethod )
-		->performRequest();
-
-		if(!empty($response))
-			return (json_decode($response));
-
-			return false;
+		
+		try {
+			$url='https://api.twitter.com/1.1/search/tweets.json';
+			$max_id = "999999999999999999";
+			$getfield = '?q=#' . $hashtag.'&include_entities=0&count='.$count.'&max_id='.$max_id;
+			if(!empty($since_id)) {
+				$getfield .= "&since_id=$since_id";
+			} else {
+				$getfield .= "&result_type=recent";
+			}
+			$requestMethod = 'GET';
+			
+			$twitter = new TwitterAPIExchange( $this->settings );
+				
+			$response = $twitter->setGetfield( $getfield )
+			->buildOauth( $url, $requestMethod )
+			->performRequest();
+			
+			if(!empty($response))
+				return (json_decode($response));
+			
+				return false;
+			
+		} catch (Exception $e) {
+			return fasle;
+		}
+		
 	}
 
 

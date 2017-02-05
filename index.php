@@ -1,12 +1,21 @@
 <?php 
-define( 'BASEPATH', __DIR__ );
-define( 'COREPATH', BASEPATH.'/core' );
-define( 'LIBPATH', BASEPATH.'/libs' );
-define( 'TPLPATH', BASEPATH.'/templates' );
-define( 'INCPATH', BASEPATH.'/inc' );
 
-require_once( BASEPATH . '/loader.php' );
+require_once(  __DIR__ . '/loader.php' );
 
-$hashtag = 'startup';
+include(TPLPATH.'/tweets.php');
+
+/* 
 $twtProcessor = new TweetsProcessor();
-$twtProcessor->hashtagTweets($hashtag);
+$tweets = $twtProcessor->hashtagTweets($hashtag); */
+
+//print_r($tweets);
+
+/* $twtMgr = new TweetsManager();
+$sinceId = $twtMgr->getLastTweetId();
+echo $sinceId; */
+
+/* $twitterApi = new TwitterAPI();
+$tweets = $twitterApi->fetchHashtagTweets($hashtag, '', 2);
+print_r($tweets); */
+
+
