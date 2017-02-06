@@ -41,11 +41,11 @@ twtApp.controller('tweetsCtrl', function($scope, $http, $interval) {
 	    		if(response.data.tweets && response.data.tweets.length) {
 	    			$scope.tweets = response.data.tweets.concat($scope.tweets);
 	    		}
-	    		$scope.fetchingTweets = false;
 	    	}
+	    	$scope.fetchingTweets = false;
 		}, function errorCallback(response) {
-			    console.log(response);
-			    $scope.fetchingTweets = false;
+		    console.log(response);
+		    $scope.fetchingTweets = false;
 		});
 	};
 	
