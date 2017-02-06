@@ -10,9 +10,11 @@ $tweets = $twtProcessor->hashtagTweets($hashtag); */
 
 //print_r($tweets);
 
-/* $twtMgr = new TweetsManager();
-$sinceId = $twtMgr->getLastTweetId();
-echo $sinceId; */
+//$twtMgr = new TweetsManager();
+//$sinceId = $twtMgr->getLastTweetId();
+//echo $sinceId;
+/* $ht_id = $twtMgr->getOrAddHashtagId('startup');
+echo $ht_id; */
 
 /* $twitterApi = new TwitterAPI();
 $tweets = $twitterApi->fetchHashtagTweets($hashtag, '', 2);

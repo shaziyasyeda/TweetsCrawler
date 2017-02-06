@@ -9,22 +9,20 @@ class TweetsProcessor {
 		$twtMgr = new TweetsManager();
 		$twitterApi = new TwitterAPI();
 		
+		$ht_id = $twtMgr->getOrAddHashtagId($hashtag);
 		$sinceId = $twtMgr->getLastTweetId();
-		
 		$twResponse = $twitterApi->fetchHashtagTweets($hashtag, $sinceId);
-		
-		//print_r($twResponse);
 		
 		if(empty($twResponse) || !is_object($twResponse) 
 				|| empty($twResponse->statuses) || !is_array($twResponse->statuses)) {
-				return empty($isFirst)? false: $twtMgr->getTweets();
+				return empty($isFirst)? false: $twtMgr->getTweets($ht_id);
 		}
 		
 		
 		$tweets = $twResponse->statuses;
 		$tweetsFromDb = array();
 		if(!empty($isFirst) && (count($tweets) < 20)) {
-			//$tweetsFromDb = $twtMgr->getTweets(1, 10);
+			//$tweetsFromDb = $twtMgr->getTweets($ht_id, 1, 10);
 		}
 		
 		$processedTweets = array();
@@ -55,6 +53,7 @@ class TweetsProcessor {
 			}
 			
 			$twtMgr->addUser($tweet);
+			$twtMgr->addTwtHtRelation($ht_id, $tweet->id_str);
 		}
 		
 		if(!empty($tweetsFromDb)) {

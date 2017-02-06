@@ -3,13 +3,17 @@ class TweetsManager {
 
 	private $tweets_table;
 	private $users_table;
+	private $ht_table;
 	private $db;
+	private $ht_twt_relation;
 
 	public function __construct() {
 		global $trxDb;
 		$this->db = $trxDb;
 		$this->tweets_table = "tweets";
 		$this->users_table = "twt_users";
+		$this->ht_table = "hashtags";
+		$this->ht_twt_relation = "ht_twt_mapping";
 	}
 
 	public function addTweet($twtObj) {
@@ -79,11 +83,13 @@ class TweetsManager {
 		}
 	}
 
-	public function getTweets($start = 0, $limit = 10) {
+	public function getTweets($ht_id, $start = 0, $limit = 10) {
 		try {
-			$sql = "SELECT * FROM $this->tweets_table tt,$this->users_table ut
-					WHERE tt.user_id = ut.user_id
-				 ORDER BY tt.timestamp DESC LIMIT $start, $limit";
+			$sql = "SELECT * FROM $this->tweets_table tt,$this->users_table ut, $this->ht_twt_relation htr
+						WHERE htr.ht_id = $ht_id
+						AND htr.twt_id = tt.tweetId 
+						AND tt.user_id = ut.user_id
+				 		ORDER BY tt.timestamp DESC LIMIT $start, $limit";
 			$result = $this->db->query($sql,  PDO::FETCH_ASSOC);
 				
 			if(empty($result) ) return false;
@@ -116,7 +122,72 @@ class TweetsManager {
 		} catch(PDOException $e) {
 			return false;
 		}
+	}
+	
+	public function getOrAddHashtagId($hashtag) {
+		if(empty($hashtag)) return false;
+		$htDetails = $this->getHashtag($hashtag);
+		
+		if(!empty($htDetails) && !empty($htDetails['ID'])) {
+			return $htDetails['ID'];
+		}
+		
+		return $this->addHashtag($hashtag);
+	}
+	
+	
+	public function getHashtag($hashtag) {
+		if(empty($hashtag)) return false;
+		try {
+			
+			$hashtag = strtolower($hashtag);
+			
+			$sql = "SELECT * FROM $this->ht_table WHERE LOWER(hashtag) = LOWER('$hashtag')";
+			$result = $this->db->query($sql,  PDO::FETCH_ASSOC);
+				
+			if(empty($result) ) return false;
+			
+			return $result->fetch();
+				
+		} catch(PDOException $e) {
+			return false;
+		}
 		
 	}
 	
-}
+	public function addHashtag($hashtag) {
+		if(empty($hashtag)) return false;
+		
+		try {
+			$this->db->beginTransaction();
+			
+			$hashtag = strtolower($hashtag);
+				
+			$sql = "INSERT INTO $this->ht_table (hashtag) VALUES ('$hashtag')"; 
+
+			$this->db->exec($sql);
+			$this->db->commit();
+			return $this->db->lastInsertId();
+			
+		} catch(PDOException $e) {
+			echo $e->getMessage();
+			return false;
+		}
+	}
+	
+	public function addTwtHtRelation($ht_id, $twt_id) {
+		if(empty($ht_id) || empty($twt_id)) return false;
+		
+		try {
+			$this->db->beginTransaction();
+				
+			$sql = "INSERT INTO $this->ht_twt_relation (ht_id, twt_id) VALUES ($ht_id, '$twt_id')";
+		
+			$this->db->exec($sql);
+			$this->db->commit();
+				
+		} catch(PDOException $e) {
+			return false;
+		}
+	}
+} 

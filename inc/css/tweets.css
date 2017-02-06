@@ -11,6 +11,14 @@ body{
 .tweets-main .header{
 	text-align: center;
 }
+.tweets-main .header .hashtag {
+	padding-bottom: 20px;
+	font-size: 20px;
+}
+.tweets-main .header .hashtag .hash {
+	color:#777;
+	font-weight: 500;
+}
 .tweets-main .content {
     border: 1px solid #ddd;
     padding: 0px;
