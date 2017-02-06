@@ -15,6 +15,7 @@ function createDbConnection($host, $dbname, $username, $password, $port='') {
 		return $datab;
 	}
 	catch(PDOException $e) {
+		echo "$host, $dbname, $username, $password, $port <br>";
 		die("Connection failed: " . $e->getMessage());
 	}
 }
