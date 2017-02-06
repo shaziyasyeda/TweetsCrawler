@@ -6,16 +6,16 @@ Pre-requisites - XAMPP/LAMPP stack
 Clone the repository in a directory (say 'trxn') in your server folder.
 
 #STEP 2 - Import Database
-Create a database named 'trx_tweets'
+Create a database named 'trx_tweets'.
 And a db user 'trax' with password 'test123'
 
-Or if you already have database or user change the details in /core/DBConnection.php file
+Or if you already have database or user change the details in /core/DBConnection.php file.
 
 Import the 'trx_tweets.sql' which is present inside directory 'resources'. This should import 4 empty tables in your db.
 Table names are - tweets, hashtags, twt_users, ht_twt_mapping
 
 #STEP 3 - Run
-Open 'http://localhost/trxn'
+Open 'http://localhost/trxn'.
 Enter the hashtag without # in input field.
 Click on 'Get Tweets' button.
 
