@@ -1,19 +1,25 @@
 <?php
-define('DB_NAME', 'trx_tweets');
+/* define('DB_NAME', 'trx_tweets');
 define('DB_USER', 'trax');
 define('DB_PASSWORD', 'test123');
-define('DB_HOST', 'localhost');
+define('DB_HOST', 'localhost'); */
 
-
-function createDbConnection($host, $dbname, $username, $password) {
+function createDbConnection($host, $dbname, $username, $password, $port='') {
 	try {
-		$datab = new PDO("mysql:host={$host};dbname={$dbname};charset=utf8", $username, $password);
+		$conn_str = "mysql:host={$host};dbname={$dbname};";
+		if(!empty($port)) {
+			$conn_str .= "port={$port}";
+		}
+		$datab = new PDO($conn_str, $username, $password);
 		$datab->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		//$datab->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 		return $datab;
 	}
 	catch(PDOException $e) {
 		die("Connection failed: " . $e->getMessage());
 	}
 }
-$trxDb = createDbConnection(DB_HOST, DB_NAME, DB_USER, DB_PASSWORD);
+
+$dbopts = parse_url(getenv('DATABASE_URL'));
+$trxDb = createDbConnection($dbopts["host"], ltrim($dbopts["path"],'/'),  $dbopts["user"], $dbopts["pass"]);
+
+//$trxDb = createDbConnection(DB_HOST, DB_NAME, DB_USER, DB_PASSWORD);
