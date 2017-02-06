@@ -1,5 +1,7 @@
 # trcxnAssignment
 
+Pre-requisites - XAMPP/LAMPP stack
+
 # STEP 1 - Clone repo
 Clone the repository in a directory (say 'trxn') in your server folder.
 
